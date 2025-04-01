@@ -915,12 +915,17 @@ button:hover {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .modal.active {
     display: flex;
     align-items: center;
     justify-content: center;
+    visibility: visible;
+    opacity: 1;
 }
 
 .modal-content {
@@ -1068,5 +1073,10 @@ button:hover {
     .tab-button.active {
         border-right-color: transparent;
         border-bottom-color: var(--primary-color);
+    }
+    
+    .modal:not(.active) {
+        display: none !important;
+        visibility: hidden;
     }
 } 
