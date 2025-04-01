@@ -1079,4 +1079,24 @@ button:hover {
         display: none !important;
         visibility: hidden;
     }
+}
+
+/* Ad container styles */
+.ad-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 1.5rem auto;
+    overflow: hidden;
+    text-align: center;
+    min-height: 90px;
+    background-color: var(--background-light);
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .ad-container {
+        margin: 1rem auto;
+        min-height: 60px;
+    }
 } 

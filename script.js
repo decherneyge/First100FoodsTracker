@@ -1,6 +1,15 @@
 // Global variables
 let currentSearchTerm = '';
 
+// Adsense initialization
+/*
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize any ads on the page
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    (adsbygoogle = window.adsbygoogle || []).push({});
+});
+*/
+
 // Initialize the app
 document.addEventListener('DOMContentLoaded', () => {
     // Load saved data from localStorage
