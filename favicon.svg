@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Jar body -->
+    <path d="M8 8h16v16c0 2.2-1.8 4-4 4H12c-2.2 0-4-1.8-4-4V8z" fill="#4a90e2"/>
+    <!-- Jar lid -->
+    <path d="M10 6h12v2H10V6z" fill="#4a90e2"/>
+    <!-- Food content -->
+    <path d="M8 8h16v12H8V8z" fill="#2ecc71"/>
+    <!-- Jar label -->
+    <rect x="12" y="10" width="8" height="4" fill="#ffffff"/>
+</svg> 

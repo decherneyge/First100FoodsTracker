@@ -1,0 +1,699 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Light theme variables */
+    --background-color: #f5f6fa;
+    --background-white: #ffffff;
+    --background-light: #f8f9fa;
+    --text-primary: #2c3e50;
+    --text-secondary: #666;
+    --primary-color: #4a90e2;
+    --success-color: #2ecc71;
+    --warning-color: #f1c40f;
+    --danger-color: #e74c3c;
+    --danger-color-light: #fde8e7;
+    --border-color: #e1e1e1;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+/* Dark theme variables */
+[data-theme="dark"] {
+    --background-color: #1a1a1a;
+    --background-white: #2d2d2d;
+    --background-light: #363636;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --primary-color: #64b5f6;
+    --success-color: #4caf50;
+    --warning-color: #ffa726;
+    --danger-color: #ef5350;
+    --danger-color-light: #3d2d2d;
+    --border-color: #404040;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode toggle button */
+.dark-mode-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+}
+
+.dark-mode-toggle:hover {
+    background: var(--background-light);
+    transform: scale(1.1);
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+}
+
+h1 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.tracker-section, .food-log-section {
+    background: var(--background-white);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.food-log-section {
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+.food-log-section h3 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 1.5rem;
+}
+
+.food-log {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.food-log-date-group {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.food-log-date-group::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+}
+
+.food-log-date-group::after {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: 2px solid var(--background-white);
+}
+
+.food-log-date-header {
+    position: sticky;
+    top: 0;
+    background: var(--background-white);
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+    z-index: 1;
+}
+
+.food-log-date-header h4 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+.food-log-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.food-item {
+    background: var(--background-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.food-item-header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: var(--background-white);
+}
+
+.food-item-header h4 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.food-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reaction-emoji {
+    font-size: 1.2rem;
+}
+
+.date-text {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.edit-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: transform 0.3s ease;
+}
+
+.edit-btn:hover {
+    color: var(--primary-color);
+}
+
+.food-item-content {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--background-light);
+}
+
+.food-item-content > div {
+    margin-bottom: 1rem;
+}
+
+.food-item-content > div:last-child {
+    margin-bottom: 0;
+}
+
+.food-item-content strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.reaction-selector, .notes-container, .date-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.reaction-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.date-display {
+    position: relative;
+}
+
+.date-text.editable {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.3s ease;
+}
+
+.date-text.editable:hover {
+    background: var(--background-white);
+}
+
+.date-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+}
+
+.delete-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: var(--danger-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: var(--danger-color-light);
+}
+
+.food-item.positive {
+    border-left-color: var(--success-color);
+}
+
+.food-item.negative {
+    border-left-color: var(--danger-color);
+}
+
+.food-item.neutral {
+    border-left-color: var(--warning-color);
+}
+
+.food-item-actions .reaction-emoji {
+    font-size: 1.3em;
+    margin-right: 4px;
+}
+
+.food-item-actions .date-text {
+    font-size: 0.95em;
+    color: var(--text-secondary);
+    margin-right: 8px;
+}
+
+.food-item-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    font-size: 1.2em;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    border-radius: var(--radius-sm);
+}
+
+.food-item-actions button:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.food-item-actions .delete-btn {
+    color: #ff4444;
+}
+
+.food-item-actions .edit-btn {
+    color: #666;
+}
+
+.food-item h4 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.food-item p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.food-item .date {
+    color: #95a5a6;
+    font-size: 0.8rem;
+}
+
+.progress-info {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.progress-info h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background-color: var(--background-light);
+    border-radius: 6px;
+    margin-top: 1rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.progress {
+    width: 0%;
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+    border-radius: 6px;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.view-toggle button {
+    padding: 0.8rem 1.5rem;
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.view-toggle button:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.view-toggle button.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.category-filters {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-btn {
+    padding: 0.6rem 1.2rem;
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.filter-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.food-card {
+    background-color: var(--background-white);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.food-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.food-card.completed {
+    background-color: #f8fff9;
+    border-color: var(--success-color);
+}
+
+.food-card h4 {
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+}
+
+.food-card .category {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    text-transform: capitalize;
+}
+
+.food-card .status {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.food-card .status button {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 1rem;
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.food-card .status button:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.food-card .status button.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.food-card .notes {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    margin-top: 0.75rem;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s ease;
+}
+
+.food-card .notes:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.entry-count {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+    text-align: right;
+    font-style: italic;
+}
+
+.food-entry {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background-color: transparent;
+    color: var(--primary-color);
+    padding: 0.8rem 1.5rem;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+
+    .food-log-section {
+        position: static;
+        max-height: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .tracker-section, .food-log-section {
+        padding: 1.5rem;
+    }
+
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .view-toggle, .category-filters {
+        flex-wrap: wrap;
+    }
+
+    .view-toggle button, .filter-btn {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+.delete-container {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    text-align: right;
+}
+
+.delete-container .delete-btn {
+    background-color: transparent;
+    color: var(--danger-color);
+    border: 2px solid var(--danger-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.delete-container .delete-btn:hover {
+    background-color: var(--danger-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.date-text.editable {
+    cursor: pointer;
+    color: #3498db;
+    text-decoration: underline;
+}
+
+.date-text.editable:hover {
+    color: #2980b9;
+}
+
+.search-container {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: var(--background-white);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+} 

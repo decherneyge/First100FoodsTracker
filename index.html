@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Food Tracker - First 100 Days</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Baby Food Tracker</h1>
+            <p class="subtitle">Track your baby's first 100 days of solid foods</p>
+            <button id="dark-mode-toggle" class="dark-mode-toggle" title="Toggle Dark Mode">🌙</button>
+        </header>
+
+        <div class="main-content">
+            <div class="tracker-section">
+                <div class="progress-info">
+                    <h2>Day <span id="current-day">1</span> of 100</h2>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="view-toggle">
+                    <button id="calendar-view" class="active">Calendar View</button>
+                    <button id="form-view">Add Custom Food</button>
+                </div>
+
+                <div class="food-entry" id="custom-food-form" style="display: none;">
+                    <h3>Add Custom Food</h3>
+                    <form id="food-form">
+                        <div class="form-group">
+                            <label for="food-name">Food Name:</label>
+                            <input type="text" id="food-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="food-category">Category:</label>
+                            <select id="food-category" required>
+                                <option value="vegetable">Vegetable</option>
+                                <option value="fruit">Fruit</option>
+                                <option value="grain">Grain</option>
+                                <option value="protein">Protein</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reaction">Reaction:</label>
+                            <select id="reaction" required>
+                                <option value="positive">Positive</option>
+                                <option value="neutral">Neutral</option>
+                                <option value="negative">Negative</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Notes:</label>
+                            <textarea id="notes" rows="3"></textarea>
+                        </div>
+                        <button type="submit">Add Food</button>
+                    </form>
+                </div>
+
+                <div class="food-calendar" id="food-calendar">
+                    <div class="search-container">
+                        <input type="text" id="food-search" placeholder="Search foods..." class="search-input">
+                    </div>
+                    <div class="category-filters">
+                        <button class="filter-btn active" data-category="all">All Foods</button>
+                        <button class="filter-btn" data-category="untried">Untried Foods</button>
+                        <button class="filter-btn" data-category="vegetable">Vegetables</button>
+                        <button class="filter-btn" data-category="fruit">Fruits</button>
+                        <button class="filter-btn" data-category="grain">Grains</button>
+                        <button class="filter-btn" data-category="protein">Proteins</button>
+                        <button class="filter-btn" data-category="dairy">Dairy</button>
+                    </div>
+                    <div class="food-grid" id="food-grid"></div>
+                </div>
+            </div>
+
+            <div class="food-log-section">
+                <h3>Food Log</h3>
+                <div id="food-list" class="food-log"></div>
+            </div>
+        </div>
+    </div>
+    <script src="recommendedFoods.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

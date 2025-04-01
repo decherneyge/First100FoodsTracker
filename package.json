@@ -1,0 +1,11 @@
+{
+  "name": "baby-food-tracker",
+  "version": "1.0.0",
+  "description": "Baby Food Tracker App",
+  "scripts": {
+    "generate-favicons": "node generate-favicons.js"
+  },
+  "dependencies": {
+    "sharp": "^0.32.6"
+  }
+} 

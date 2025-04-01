@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Generated files
+favicon-*.png
+apple-touch-icon.png
+android-chrome-*.png
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local 
