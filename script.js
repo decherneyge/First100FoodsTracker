@@ -35,20 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const calendarViewBtn = document.getElementById('calendar-view');
     const formViewBtn = document.getElementById('form-view');
     const customFoodForm = document.getElementById('custom-food-form');
-    const foodCalendar = document.getElementById('food-calendar');
+    const foodGridSection = document.getElementById('food-grid-section');
 
     calendarViewBtn.addEventListener('click', () => {
         calendarViewBtn.classList.add('active');
         formViewBtn.classList.remove('active');
         customFoodForm.style.display = 'none';
-        foodCalendar.style.display = 'block';
+        foodGridSection.style.display = 'block';
     });
 
     formViewBtn.addEventListener('click', () => {
         formViewBtn.classList.add('active');
         calendarViewBtn.classList.remove('active');
         customFoodForm.style.display = 'block';
-        foodCalendar.style.display = 'none';
+        foodGridSection.style.display = 'none';
     });
 
     // Handle category filters
@@ -105,15 +105,131 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSearchTerm = e.target.value.toLowerCase();
         filterFoodGrid();
     });
+
+    // Modal and Tab functionality
+    const settingsToggle = document.getElementById('settings-toggle');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeModal = document.getElementById('close-modal');
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    const emailDataBtn = document.getElementById('email-data');
+    const exportDataTextarea = document.getElementById('export-data');
+    const importDataTextarea = document.getElementById('import-data');
+    const importDataBtn = document.getElementById('import-data-btn');
+
+    // Open modal
+    settingsToggle.addEventListener('click', () => {
+        settingsModal.classList.add('active');
+        // Show export tab by default
+        showTab('export');
+    });
+
+    // Close modal
+    closeModal.addEventListener('click', () => {
+        settingsModal.classList.remove('active');
+    });
+
+    // Close modal when clicking outside
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.classList.remove('active');
+        }
+    });
+
+    // Tab switching
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+            showTab(tabId);
+        });
+    });
+
+    function showTab(tabId) {
+        // Update tab buttons
+        tabButtons.forEach(button => {
+            button.classList.toggle('active', button.getAttribute('data-tab') === tabId);
+        });
+
+        // Update tab panes
+        tabPanes.forEach(pane => {
+            pane.classList.toggle('active', pane.id === `${tabId}-tab`);
+        });
+
+        // If showing export tab, update the data
+        if (tabId === 'export') {
+            updateExportData();
+        }
+    }
+
+    // Update export data functionality
+    function updateExportData() {
+        const savedData = localStorage.getItem('babyFoodTracker') || '{}';
+        exportDataTextarea.value = encodeData(savedData);
+    }
+
+    // Copy to clipboard functionality
+    exportDataTextarea.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(exportDataTextarea.value);
+            const originalLabel = exportDataTextarea.previousElementSibling.textContent;
+            exportDataTextarea.previousElementSibling.textContent = '✅ Copied to clipboard!';
+            setTimeout(() => {
+                exportDataTextarea.previousElementSibling.textContent = originalLabel;
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy to clipboard. Please try selecting and copying manually.');
+        }
+    });
+
+    // Email data functionality
+    emailDataBtn.addEventListener('click', () => {
+        const savedData = localStorage.getItem('babyFoodTracker') || '{}';
+        const encodedData = encodeData(savedData);
+        const mailtoLink = `mailto:?subject=Baby Food Tracker Data&body=${encodeURIComponent(encodedData)}`;
+        window.location.href = mailtoLink;
+    });
+
+    // Import data functionality
+    importDataBtn.addEventListener('click', () => {
+        try {
+            const encodedData = importDataTextarea.value.trim();
+            if (!encodedData) {
+                alert('Please enter encoded data to import.');
+                return;
+            }
+
+            const decodedData = decodeData(encodedData);
+            if (!decodedData || typeof decodedData !== 'object') {
+                throw new Error('Invalid data format');
+            }
+
+            localStorage.setItem('babyFoodTracker', JSON.stringify(decodedData));
+            
+            // Update the UI components instead of calling updateUI
+            const savedData = decodedData;
+            updateProgress(savedData.currentDay);
+            renderFoodList(savedData.foods);
+            renderFoodGrid(savedData.completedFoods);
+            
+            settingsModal.classList.remove('active');
+            alert('Data imported successfully!');
+            window.location.reload();
+        } catch (error) {
+            console.error('Import error:', error);
+            alert('Error importing data. Please check the format and try again.');
+        }
+    });
 });
 
-// Update progress bar and day counter
-function updateProgress(currentDay) {
-    const progressFill = document.getElementById('progress-fill');
-    const currentDayElement = document.getElementById('current-day');
+// Update progress display
+function updateProgress(day) {
+    const progressElement = document.getElementById('progress');
+    const dayElement = document.getElementById('current-day');
     
-    currentDayElement.textContent = currentDay;
-    progressFill.style.width = `${currentDay}%`;
+    day = Number(day);
+    dayElement.textContent = day;
+    progressElement.style.width = `${(day / 100) * 100}%`;
 }
 
 // Render the food grid
@@ -591,4 +707,85 @@ function addFoodToLog(food) {
 function updateThemeToggle(theme) {
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     darkModeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
+// Simple encoding/decoding functions
+function encodeData(data) {
+    // Convert to base64
+    return btoa(data);
+}
+
+function decodeData(encodedData) {
+    try {
+        // Decode from base64 and parse JSON
+        const decodedString = atob(encodedData);
+        return JSON.parse(decodedString);
+    } catch (error) {
+        console.error('Decode error:', error);
+        return null;
+    }
+}
+
+// Handle data export
+function exportData() {
+    const savedData = localStorage.getItem('babyFoodTracker');
+    const encodedData = encodeData(savedData);
+    const subject = 'Baby Food Tracker Data Backup';
+    const body = encodeURIComponent(encodedData);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// Handle data import
+function importData() {
+    const input = document.createElement('textarea');
+    input.style.position = 'fixed';
+    input.style.top = '50%';
+    input.style.left = '50%';
+    input.style.transform = 'translate(-50%, -50%)';
+    input.style.width = '80%';
+    input.style.height = '200px';
+    input.style.padding = '20px';
+    input.style.boxSizing = 'border-box';
+    input.style.border = '2px solid var(--primary-color)';
+    input.style.borderRadius = 'var(--radius-md)';
+    input.style.zIndex = '1000';
+    input.placeholder = 'Paste your backup data here and press Enter to import, or Escape to cancel';
+
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.zIndex = '999';
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(input);
+    input.focus();
+
+    function cleanup() {
+        document.body.removeChild(input);
+        document.body.removeChild(overlay);
+    }
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            try {
+                const decodedData = decodeData(input.value);
+                if (decodedData && typeof decodedData === 'object') {
+                    localStorage.setItem('babyFoodTracker', JSON.stringify(decodedData));
+                    cleanup();
+                    window.location.reload();
+                } else {
+                    alert('Invalid data format. Please check your data and try again.');
+                }
+            } catch (error) {
+                alert('Invalid data format. Please check your data and try again.');
+            }
+        } else if (e.key === 'Escape') {
+            cleanup();
+        }
+    });
 } 

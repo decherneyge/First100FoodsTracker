@@ -14,22 +14,54 @@
 <body>
     <div class="container">
         <header>
-            <h1>Baby Food Tracker</h1>
-            <p class="subtitle">Track your baby's first 100 days of solid foods</p>
-            <button id="dark-mode-toggle" class="dark-mode-toggle" title="Toggle Dark Mode">🌙</button>
+            <h1>Baby's First Foods</h1>
+            <p class="subtitle">Track your baby's food journey for the first 100 days</p>
+            <div class="progress-info">
+                <h2>Day <span id="current-day">1</span> of 100</h2>
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+            <button id="dark-mode-toggle" class="theme-toggle">🌙</button>
+            <button id="settings-toggle" class="theme-toggle settings-toggle">⚙️</button>
         </header>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Settings</h3>
+                    <button id="close-modal" class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-tabs">
+                        <button class="tab-button active" data-tab="export">📤 Export Data</button>
+                        <button class="tab-button" data-tab="import">📥 Import Data</button>
+                    </div>
+                    <div class="tab-content">
+                        <div id="export-tab" class="tab-pane active">
+                            <button id="email-data" class="action-button">📧 Email Data</button>
+                            <div class="data-display">
+                                <label for="export-data">Click to copy your encoded data:</label>
+                                <textarea id="export-data" readonly></textarea>
+                            </div>
+                        </div>
+                        <div id="import-tab" class="tab-pane">
+                            <div class="data-input">
+                                <label for="import-data">Paste Encoded Data:</label>
+                                <textarea id="import-data"></textarea>
+                            </div>
+                            <button id="import-data-btn" class="action-button">📥 Import Data</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="main-content">
             <div class="tracker-section">
-                <div class="progress-info">
-                    <h2>Day <span id="current-day">1</span> of 100</h2>
-                    <div class="progress-bar">
-                        <div class="progress" id="progress-fill"></div>
-                    </div>
-                </div>
-
                 <div class="view-toggle">
-                    <button id="calendar-view" class="active">Calendar View</button>
+                    <button id="calendar-view" class="active">Food Grid</button>
                     <button id="form-view">Add Custom Food</button>
                 </div>
 
@@ -67,20 +99,24 @@
                     </form>
                 </div>
 
-                <div class="food-calendar" id="food-calendar">
-                    <div class="search-container">
-                        <input type="text" id="food-search" placeholder="Search foods..." class="search-input">
+                <div id="food-grid-section">
+                    <div class="food-grid-container">
+                        <div class="food-grid-header">
+                            <div class="search-container">
+                                <input type="text" id="food-search" placeholder="Search foods...">
+                            </div>
+                            <div class="category-filters">
+                                <button class="filter-btn active" data-category="all">All Foods</button>
+                                <button class="filter-btn" data-category="untried">Untried Foods</button>
+                                <button class="filter-btn" data-category="vegetable">Vegetables</button>
+                                <button class="filter-btn" data-category="fruit">Fruits</button>
+                                <button class="filter-btn" data-category="grain">Grains</button>
+                                <button class="filter-btn" data-category="protein">Proteins</button>
+                                <button class="filter-btn" data-category="dairy">Dairy</button>
+                            </div>
+                        </div>
+                        <div id="food-grid"></div>
                     </div>
-                    <div class="category-filters">
-                        <button class="filter-btn active" data-category="all">All Foods</button>
-                        <button class="filter-btn" data-category="untried">Untried Foods</button>
-                        <button class="filter-btn" data-category="vegetable">Vegetables</button>
-                        <button class="filter-btn" data-category="fruit">Fruits</button>
-                        <button class="filter-btn" data-category="grain">Grains</button>
-                        <button class="filter-btn" data-category="protein">Proteins</button>
-                        <button class="filter-btn" data-category="dairy">Dairy</button>
-                    </div>
-                    <div class="food-grid" id="food-grid"></div>
                 </div>
             </div>
 
