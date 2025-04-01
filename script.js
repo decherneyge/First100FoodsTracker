@@ -127,37 +127,18 @@ function renderFoodGrid(completedFoods, filteredFoods = null) {
     foodsToRender.forEach(food => {
         const foodCard = document.createElement('div');
         const entries = completedFoods[food.name] || [];
-        const latestEntry = entries[entries.length - 1] || {};
         
         foodCard.className = `food-card ${entries.length > 0 ? 'completed' : ''}`;
         
         foodCard.innerHTML = `
             <h4>${food.name}</h4>
             <div class="category">${food.category}</div>
-            <div class="status">
-                <button class="reaction-btn ${latestEntry.reaction === 'positive' ? 'active' : ''}" data-reaction="positive">👍</button>
-                <button class="reaction-btn ${latestEntry.reaction === 'neutral' ? 'active' : ''}" data-reaction="neutral">😐</button>
-                <button class="reaction-btn ${latestEntry.reaction === 'negative' ? 'active' : ''}" data-reaction="negative">👎</button>
-            </div>
-            <textarea class="notes" placeholder="Add notes...">${latestEntry.notes || ''}</textarea>
             ${entries.length > 0 ? `<div class="entry-count">Entries: ${entries.length}</div>` : ''}
         `;
 
-        // Handle reaction buttons
-        const reactionButtons = foodCard.querySelectorAll('.reaction-btn');
-        reactionButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const reaction = button.dataset.reaction;
-                reactionButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                updateFoodStatus(food.name, reaction);
-            });
-        });
-
-        // Handle notes
-        const notesTextarea = foodCard.querySelector('.notes');
-        notesTextarea.addEventListener('change', () => {
-            updateFoodStatus(food.name, null, notesTextarea.value);
+        // Make the entire card clickable to add to log
+        foodCard.addEventListener('click', () => {
+            addFoodToLog(food);
         });
 
         foodGrid.appendChild(foodCard);
@@ -586,13 +567,24 @@ function addFoodToLog(food) {
         date: todayString,
         day: dayNumber,
         reaction: 'neutral',
-        notes: ''
+        notes: '',
+        isExpanded: true // New items start expanded
     };
 
     savedData.foods.push(newFood);
     savedData.currentDay = dayNumber;
+
+    // Reset the food grid square's visual state by updating the latest entry
+    if (savedData.completedFoods[food.name] && savedData.completedFoods[food.name].length > 0) {
+        const latestEntry = savedData.completedFoods[food.name][savedData.completedFoods[food.name].length - 1];
+        latestEntry.reaction = 'neutral';
+        latestEntry.notes = '';
+    }
+
     localStorage.setItem('babyFoodTracker', JSON.stringify(savedData));
     renderFoodList(savedData.foods);
+    renderFoodGrid(savedData.completedFoods);
+    updateProgress(savedData.currentDay);
 }
 
 // Update theme toggle button
