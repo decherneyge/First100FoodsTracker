@@ -9,10 +9,6 @@ package-lock.json
 *.swo
 .DS_Store
 
-# Generated files
-favicon-*.png
-apple-touch-icon.png
-android-chrome-*.png
 
 # Logs
 *.log
